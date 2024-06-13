@@ -4,11 +4,12 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 15s
   cloud:
+    # 网关配置
     gateway:
-      # 配置Netty http客户端属性
+      # 配置Netty HTTP客户端属性
       httpclient:
         connect-timeout: 2000
-        response-timeout: 5s
+        response-timeout: 3s
         pool:
           # 连接池类型
           type: elastic
@@ -22,10 +23,41 @@ spring:
           predicates:
             # 断言形式为路径匹配
             - Path=/books/**
+          filters:
+            # 过滤器名称
+            - name: CircuitBreaker
+              args:
+                # 断路器名称
+                name: catalogCircuitBreaker
+                # 断路器打开时，要转发的地址
+                fallbackUri: forward:/catalog-fallback
         - id: order-route
           uri: ${ORDER_SERVICE_URL:http://localhost:9002}/orders
           predicates:
             - Path=/orders/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                # 这次没有配置回退uri
+                name: orderCircuitBreaker
+      # 默认过滤器列表
+      default-filters:
+          # 重试过滤器，Gateway应用顺序=3
+        - name: Retry
+          args:
+            # 重试次数
+            retries: 2
+            methods: GET
+            # 仅遇到5xx错误时重试
+            series: SERVER_ERROR
+            # 仅当抛出指定异常时重试；下游服务未运行时抛出的是ConnectException，不会触发重试
+            exceptions: java.io.IOException, java.util.concurrent.TimeoutException
+            # 重试延迟策略
+            backoff:
+              firstBackoff: 50ms
+              maxBackOff: 500ms
+              factor: 2
+              baseOnPreviousValue: false
 
 server:
   port: 9000
@@ -33,3 +65,29 @@ server:
     connection-timeout: 2s
     idle-timeout: 15s
   shutdown: graceful
+
+resilience4j:
+  # 断路器配置，Gateway应用顺序=2
+  circuitbreaker:
+    configs:
+      # 适用于所有断路器的默认配置
+      default:
+        # 窗口size
+        sliding-window-size: 20
+        # 窗口中失败率高于50%时，断路器断开
+        failure-rate-threshold: 50
+        # 断路器=半开状态时，允许请求次数
+        permitted-number-of-calls-in-half-open-state: 5
+        # 从打开到半开的等待时间
+        wait-duration-in-open-state: 15s
+  # 限时器配置，Gateway应用顺序=1
+  timelimiter:
+    configs:
+      default:
+        # 超时时间，优先级高于为Netty HTTP客户端定义的响应超时时间
+        timeout-duration: 3s
+
+# 为resilience4j启用调试日志
+logging:
+  level:
+    io.github.resilience4j: DEBUG

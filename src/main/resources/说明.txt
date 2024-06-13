@@ -1,0 +1,6 @@
+# 需安装ab（Apache Benchmark），在D:\Apache24\
+# 连续发送21个POST请求
+# 应用日志中将记录20个Event ERROR，1个Event STATE_TRANSITION（断路器打开），1个Event NOT_PERMITTED（第21次请求直接被熔断）
+ab -n 21 -c 1 -m POST http://localhost:9000/orders
+# 连续发送21个GET请求，因为有回退策略，所以21次都收到了成功响应，但请求第20次时断路器打开Event STATE_TRANSITION，第21次直接熔断，进入/catalog-fallback
+ab -n 21 -c 1 -m GET http://localhost:9000/books
