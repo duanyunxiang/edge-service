@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: edge-service
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+  cloud:
+    gateway:
+      # 配置Netty http客户端属性
+      httpclient:
+        connect-timeout: 2000
+        response-timeout: 5s
+        pool:
+          # 连接池类型
+          type: elastic
+          max-idle-time: 15s
+          max-life-time: 60s
+      # 路由定义列表
+      routes:
+          # 路由id
+        - id: catalog-route
+          uri: ${CATALOG_SERVICE_URL:http://localhost:9001}/books
+          predicates:
+            # 断言形式为路径匹配
+            - Path=/books/**
+        - id: order-route
+          uri: ${ORDER_SERVICE_URL:http://localhost:9002}/orders
+          predicates:
+            - Path=/orders/**
+
+server:
+  port: 9000
+  netty:
+    connection-timeout: 2s
+    idle-timeout: 15s
+  shutdown: graceful
