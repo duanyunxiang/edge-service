@@ -3,6 +3,19 @@ spring:
     name: edge-service
   lifecycle:
     timeout-per-shutdown-phase: 15s
+  data:
+    # redis配置
+    redis:
+      connect-timeout: 2s
+      host: localhost
+      port: 6379
+      # 收到响应时间限制
+      timeout: 1s
+  session:
+    timeout: 10m
+    redis:
+      # 命名空间，作为key前缀
+      namespace: polar:edge
   cloud:
     # 网关配置
     gateway:
@@ -42,7 +55,9 @@ spring:
                 name: orderCircuitBreaker
       # 默认过滤器列表
       default-filters:
-          # 重试过滤器，Gateway应用顺序=3
+          # 保存会话数据
+        - SaveSession
+          # 重试过滤器，Gateway应用顺序=4
         - name: Retry
           args:
             # 重试次数
@@ -58,6 +73,16 @@ spring:
               maxBackOff: 500ms
               factor: 2
               baseOnPreviousValue: false
+          # 请求限流器（令牌桶算法），Gateway应用顺序=1，若redis不可用，该限流器会被spring cloud gateway暂时禁用
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              # 令牌补充率：10个/s
+              replenishRate: 10
+              # 桶容量
+              burstCapacity: 20
+              # 每次请求消耗令牌数
+              requestedTokens: 1
 
 server:
   port: 9000
@@ -67,7 +92,7 @@ server:
   shutdown: graceful
 
 resilience4j:
-  # 断路器配置，Gateway应用顺序=2
+  # 断路器配置，Gateway应用顺序=3
   circuitbreaker:
     configs:
       # 适用于所有断路器的默认配置
@@ -80,7 +105,7 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 5
         # 从打开到半开的等待时间
         wait-duration-in-open-state: 15s
-  # 限时器配置，Gateway应用顺序=1
+  # 限时器配置，Gateway应用顺序=2
   timelimiter:
     configs:
       default:
