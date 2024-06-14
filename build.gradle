@@ -30,6 +30,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive:3.2.6'
     // 引入session管理
     implementation 'org.springframework.session:spring-session-data-redis'
+    // 使用spring cloud config client
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.testcontainers:junit-jupiter'
@@ -41,6 +43,14 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
         mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
     }
+}
+
+bootBuildImage {
+    builder = "docker.io/paketobuildpacks/builder-jammy-base:0.4.302"
+    // 没有指定label，默认latest
+    imageName = "${project.name}"
+    // 指定java版本
+    environment = ["BP_JVM_VERSION": "17.*"]
 }
 
 tasks.named('test') {

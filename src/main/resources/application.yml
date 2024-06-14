@@ -16,7 +16,19 @@ spring:
     redis:
       # 命名空间，作为key前缀
       namespace: polar:edge
+  config:
+    import: "optional:configserver:"
   cloud:
+    config:
+      uri: http://localhost:8888
+      request-connect-timeout: 5000
+      request-read-timeout: 5000
+      fail-fast: false
+      retry:
+        max-attempts: 3
+        initial-interval: 1000
+        max-interval: 2000
+        multiplier: 1.1
     # 网关配置
     gateway:
       # 配置Netty HTTP客户端属性
@@ -113,6 +125,6 @@ resilience4j:
         timeout-duration: 3s
 
 # 为resilience4j启用调试日志
-logging:
-  level:
-    io.github.resilience4j: DEBUG
+#logging:
+#  level:
+#    io.github.resilience4j: DEBUG
