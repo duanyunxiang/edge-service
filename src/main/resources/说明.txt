@@ -4,3 +4,7 @@
 ab -n 21 -c 1 -m POST http://localhost:9000/orders
 # 连续发送21个GET请求，因为有回退策略，所以21次都收到了成功响应，但请求第20次时断路器打开Event STATE_TRANSITION，第21次直接熔断，进入/catalog-fallback
 ab -n 21 -c 1 -m GET http://localhost:9000/books
+
+minikube image load edge-service --profile polar
+kubectl apply -f k8s  将应用部署到集群中（确保image已导入集群中），不使用tilt up
+kubectl delete -f k8s  删除部署

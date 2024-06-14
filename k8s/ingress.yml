@@ -3,14 +3,17 @@ kind: Ingress
 metadata:
   name: polar-ingress
 spec:
+  # ingress控制器类型
   ingressClassName: nginx
   rules:
     - http:
         paths:
+            # 所有请求
           - path: /
             pathType: Prefix
             backend:
               service:
+                # 将流量转发至集群中Service
                 name: edge-service
                 port:
                   number: 80
