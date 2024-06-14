@@ -6,5 +6,6 @@ ab -n 21 -c 1 -m POST http://localhost:9000/orders
 ab -n 21 -c 1 -m GET http://localhost:9000/books
 
 minikube image load edge-service --profile polar
-kubectl apply -f k8s  将应用部署到集群中（确保image已导入集群中），不使用tilt up
+kubectl apply -f k8s  将应用部署到集群中（确保image已导入集群中），不使用tilt up（此时需手动转发暴露端口）
+kubectl port-forward service/edge-service 9000:80
 kubectl delete -f k8s  删除部署
