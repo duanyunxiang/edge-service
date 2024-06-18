@@ -1,0 +1,31 @@
+package com.dyx.edgeservice.security;
+
+import com.dyx.edgeservice.user.User;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+
+@RestController
+public class UserController {
+    @GetMapping("user")
+    public Mono<User> getUser(){
+        //获取当前认证用户的SecurityContext
+        return ReactiveSecurityContextHolder.getContext()
+                //获取Authentication
+                .map(SecurityContext::getAuthentication)
+                //获取Principal（因为使用的是OIDC，所以类型为OidcUser）
+                .map(authentication -> (OidcUser) authentication.getPrincipal())
+                .map(oidcUser -> new User(
+                        //用户名
+                        oidcUser.getPreferredUsername(),
+                        oidcUser.getGivenName(),
+                        oidcUser.getFamilyName(),
+                        List.of("employee","customer"))
+                );
+    }
+}
