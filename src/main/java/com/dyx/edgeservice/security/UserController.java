@@ -27,7 +27,6 @@ public class UserController {
         return Mono.just(user);
     }
 
-    @Deprecated
     public Mono<User> getUser2(){
         //获取当前认证用户的SecurityContext
         return ReactiveSecurityContextHolder.getContext()
