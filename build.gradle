@@ -32,6 +32,8 @@ dependencies {
     implementation 'org.springframework.session:spring-session-data-redis'
     // 使用spring cloud config client
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    // 引入spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.testcontainers:junit-jupiter'
