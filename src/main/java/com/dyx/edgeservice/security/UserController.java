@@ -1,6 +1,7 @@
 package com.dyx.edgeservice.security;
 
 import com.dyx.edgeservice.user.User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -13,7 +14,21 @@ import java.util.List;
 @RestController
 public class UserController {
     @GetMapping("user")
-    public Mono<User> getUser(){
+    //使用自动注入获取Principal
+    public Mono<User> getUser(@AuthenticationPrincipal OidcUser oidcUser){
+        var user=new User(
+                //用户名
+                oidcUser.getPreferredUsername(),
+                oidcUser.getGivenName(),
+                oidcUser.getFamilyName(),
+                List.of("employee","customer")
+        );
+        //包装为反应式响应
+        return Mono.just(user);
+    }
+
+    @Deprecated
+    public Mono<User> getUser2(){
         //获取当前认证用户的SecurityContext
         return ReactiveSecurityContextHolder.getContext()
                 //获取Authentication
