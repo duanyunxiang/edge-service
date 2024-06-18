@@ -1,8 +1,29 @@
+logging:
+  level:
+    root: info
+
 spring:
   application:
     name: edge-service
   lifecycle:
     timeout-per-shutdown-phase: 15s
+  # 认证配置
+  security:
+    oauth2:
+      client:
+        registration:
+          # registrationId客户端注册名称，接收授权码url地址格式：/login/oauth2/code/{registrationId}
+          keycloak:
+            client-id: edge-service
+            # 客户端与keycloak认证的共享secret
+            client-secret: polar-keycloak-secret
+            # 客户端希望访问的scope列表
+            scope: openid
+        provider:
+          # 关联前面定义的registrationId=keycloak
+          keycloak:
+            # keycloak对外提供指定realm=PolarBookshop功能的端点
+            issuer-uri: http://localhost:8080/realms/PolarBookshop
   data:
     # redis配置
     redis:

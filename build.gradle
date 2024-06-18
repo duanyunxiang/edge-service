@@ -33,11 +33,15 @@ dependencies {
     // 使用spring cloud config client
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     // 引入spring security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
+    // 引入OAuth2客户端，可去掉spring security
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.testcontainers:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 dependencyManagement {
