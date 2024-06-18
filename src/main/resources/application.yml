@@ -24,14 +24,13 @@ spring:
           keycloak:
             # keycloak对外提供指定realm=PolarBookshop功能的端点
             issuer-uri: http://localhost:8080/realms/PolarBookshop
-  data:
-    # redis配置
-    redis:
-      connect-timeout: 2s
-      host: localhost
-      port: 6379
-      # 收到响应时间限制
-      timeout: 1s
+  # redis配置
+  redis:
+    connect-timeout: 2s
+    host: localhost
+    port: 6379
+    # 收到响应时间限制
+    timeout: 1s
   session:
     timeout: 10m
     redis:
@@ -63,6 +62,11 @@ spring:
           max-life-time: 60s
       # 路由定义列表
       routes:
+        - id: spa-route
+          uri: ${SPA_URL:http://localhost:9004}
+          predicates:
+            # 匹配根端点和SPA静态资源
+            - Path=/,/*.css,/*.js,/favicon.ico
           # 路由id
         - id: catalog-route
           uri: ${CATALOG_SERVICE_URL:http://localhost:9001}/books
