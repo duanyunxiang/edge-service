@@ -3,6 +3,7 @@ package com.dyx.edgeservice.user;
 import java.util.List;
 
 import com.dyx.edgeservice.config.SecurityConfig;
+import com.dyx.edgeservice.security.UserController;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@WebFluxTest(UserControllerTests.class)
+@WebFluxTest(UserController.class)
 // 导入应用的安全配置
 @Import(SecurityConfig.class)
 public class UserControllerTests {
@@ -34,7 +35,7 @@ public class UserControllerTests {
                 .expectStatus().isUnauthorized();
     }
 
-    //@Test
+    @Test
     void whenAuthenticatedThenReturnUser(){
         var expectedUser=new User("jon.snow","Jon","Snow", List.of("employee","customer"));
 
