@@ -18,7 +18,7 @@ spring:
             # 客户端与keycloak认证的共享secret
             client-secret: polar-keycloak-secret
             # 客户端希望访问的scope列表
-            scope: openid
+            scope: openid,roles
         provider:
           # 关联前面定义的registrationId=keycloak
           keycloak:
@@ -94,6 +94,8 @@ spring:
       default-filters:
           # 保存会话数据
         - SaveSession
+          # 启用访问令牌传播
+        - TokenRelay
           # 重试过滤器，Gateway应用顺序=4
         - name: Retry
           args:

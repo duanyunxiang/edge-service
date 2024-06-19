@@ -21,7 +21,8 @@ public class UserController {
                 oidcUser.getPreferredUsername(),
                 oidcUser.getGivenName(),
                 oidcUser.getFamilyName(),
-                List.of("employee","customer")
+                //获取roles claim
+                oidcUser.getClaimAsStringList("roles")
         );
         //包装为反应式响应
         return Mono.just(user);
