@@ -26,6 +26,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveClientRegistrationRepository clientRegistrationRepository){
         return http
                 .authorizeExchange(exchange -> exchange
+                        .pathMatchers("/actuator/**").permitAll()
                         //允许未认证访问静态资源
                         .pathMatchers("/", "/*.css", "/*.js", "/favicon.ico").permitAll()
                         // 允许未认证查看图书
