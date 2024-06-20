@@ -13,6 +13,11 @@ spec:
     metadata:
       labels:
         app: edge-service
+      annotations:
+        # 告知Prometheus要抓取该Pod中的容器
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /actuator/prometheus
+        prometheus.io/port: "9000"
     spec:
       containers:
         - name: edge-service
