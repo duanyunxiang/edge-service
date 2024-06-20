@@ -43,7 +43,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
-              port: 9001
+              port: 9000
             # 首次检查延迟，大于应用启动时间，否则会与部署应用冲突
             initialDelaySeconds: 20
             # 检查频率
@@ -52,6 +52,6 @@ spec:
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
-              port: 9001
+              port: 9000
             initialDelaySeconds: 5
             periodSeconds: 15
