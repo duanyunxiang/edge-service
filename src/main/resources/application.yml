@@ -1,6 +1,10 @@
 logging:
+  group:
+    # 定义日志组
+    circuitbreaker: io.github.resilience4j,org.springframework.cloud.circuitbreaker
   level:
-    root: info
+    # 为组指定统一的日志级别
+    circuitbreaker: info
 
 spring:
   application:
@@ -150,8 +154,3 @@ resilience4j:
       default:
         # 超时时间，优先级高于为Netty HTTP客户端定义的响应超时时间
         timeout-duration: 3s
-
-# 为resilience4j启用调试日志
-#logging:
-#  level:
-#    io.github.resilience4j: DEBUG

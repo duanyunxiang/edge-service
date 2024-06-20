@@ -1,6 +1,7 @@
 package com.dyx.edgeservice.security;
 
 import com.dyx.edgeservice.user.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
@@ -11,6 +12,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 public class UserController {
     @GetMapping("user")
@@ -24,6 +26,7 @@ public class UserController {
                 //获取roles claim
                 oidcUser.getClaimAsStringList("roles")
         );
+        log.info("获取当前认证用户，user：{}",oidcUser);
         //包装为反应式响应
         return Mono.just(user);
     }

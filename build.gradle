@@ -37,6 +37,9 @@ dependencies {
     // 引入OAuth2客户端，可去掉spring security
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'io.projectreactor:reactor-test'
