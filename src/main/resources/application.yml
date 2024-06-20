@@ -5,6 +5,9 @@ logging:
   level:
     # 为组指定统一的日志级别
     circuitbreaker: info
+  pattern:
+    # 在日志级别旁边，包含应用名、跟踪ID和跨度ID
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
 
 spring:
   application:

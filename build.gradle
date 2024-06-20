@@ -20,6 +20,8 @@ repositories {
 ext {
     set('springCloudVersion', "2021.0.8")
     set('testcontainersVersion',"1.17.3")
+    // OpenTelemetry版本
+    set('otelVersion',"1.17.0")
 }
 
 dependencies {
@@ -45,6 +47,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     // 引入Micrometer对resilience4j的插装
     runtimeOnly 'io.github.resilience4j:resilience4j-micrometer'
+    // OpenTelemetry代理会通过字节码动态插装Java代码
+    runtimeOnly "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelVersion}"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
