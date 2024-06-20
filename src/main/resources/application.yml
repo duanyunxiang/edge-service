@@ -132,7 +132,7 @@ management:
     web:
       exposure:
         # 通过http暴露/actuator/health端点
-        include: health
+        include: health, prometheus
   endpoint:
     health:
       # 始终展示应用详情和组件详情
@@ -145,6 +145,10 @@ management:
         readiness:
           # 就绪探针会组合考虑redis的可用性
           include: readinessState,redis
+  metrics:
+    tags:
+      # 添加带有应用名称的Micrometer通用标签，这会将一个Prometheus标记应用到所有度量中
+      application: ${spring.application.name}
 
 server:
   port: 9000

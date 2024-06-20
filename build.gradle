@@ -38,9 +38,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // 使用spring boot actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // 集成Grafana观测工具prometheus，用于收集和存储应用metrics度量信息
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    // 引入Micrometer对resilience4j的插装
+    runtimeOnly 'io.github.resilience4j:resilience4j-micrometer'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
