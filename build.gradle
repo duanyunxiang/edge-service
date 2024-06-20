@@ -36,6 +36,8 @@ dependencies {
     //implementation 'org.springframework.boot:spring-boot-starter-security'
     // 引入OAuth2客户端，可去掉spring security
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // 使用spring boot actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'

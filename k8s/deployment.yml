@@ -39,3 +39,19 @@ spec:
               value: http://polar-keycloak/realms/PolarBookshop
             - name: LANG
               value: en_US.UTF-8
+          # 配置存活探针
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 9001
+            # 首次检查延迟，大于应用启动时间，否则会与部署应用冲突
+            initialDelaySeconds: 20
+            # 检查频率
+            periodSeconds: 10
+          # 配置就绪探针
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 9001
+            initialDelaySeconds: 5
+            periodSeconds: 15

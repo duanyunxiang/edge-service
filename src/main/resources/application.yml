@@ -127,6 +127,25 @@ spring:
               # 每次请求消耗令牌数
               requestedTokens: 1
 
+management:
+  endpoints:
+    web:
+      exposure:
+        # 通过http暴露/actuator/health端点
+        include: health
+  endpoint:
+    health:
+      # 始终展示应用详情和组件详情
+      show-details: always
+      show-components: always
+      probes:
+        # 启用对健康探针的支持
+        enabled: true
+      group:
+        readiness:
+          # 就绪探针会组合考虑redis的可用性
+          include: readinessState,redis
+
 server:
   port: 9000
   netty:
