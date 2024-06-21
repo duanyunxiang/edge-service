@@ -60,3 +60,7 @@ spec:
               port: 9000
             initialDelaySeconds: 5
             periodSeconds: 15
+      volumes:
+        - name: edge-config-volume
+          configMap:
+            name: edge-config
