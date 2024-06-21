@@ -44,9 +44,11 @@ spring:
       # 命名空间，作为key前缀
       namespace: polar:edge
   config:
-    import: "optional:configserver:"
+    import: ""
   cloud:
     config:
+      # 禁用spring cloud client客户端
+      enabled: false
       uri: http://localhost:8888
       request-connect-timeout: 5000
       request-read-timeout: 5000
